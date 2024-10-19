@@ -272,4 +272,45 @@ export default function () {
       assertPxColor(grid, 10, 90, c.b, done);
     }, 1);
   });
+  it('Keeps column widths when removing a column', function (done) {
+    var grid = g({
+      test: this.test,
+      data: smallData()
+    });
+    grid.setColumnWidth(0, 20);
+    grid.setColumnWidth(1, 100);    
+    grid.setColumnWidth(2, 50);
+    grid.deleteColumn(0);
+    doAssert(grid.getColumnWidth(0) === 100, "new column[0] width should be old column[1] width");
+    doAssert(grid.getColumnWidth(1) === 50, "new column[1] width should be old column[2] width");
+    done();
+  });
+  it('Keeps column widths when adding a column', function (done) {
+    var grid = g({
+      test: this.test,
+      data: smallData()
+    });
+    grid.setColumnWidth(0, 20);
+    grid.setColumnWidth(1, 100);    
+    grid.setColumnWidth(2, 50);
+    grid.addColumn({name: 'Foo'});
+    doAssert(grid.getColumnWidth(0) === 20, "new column[0] width should be old column[0] width");
+    doAssert(grid.getColumnWidth(1) === 100, "new column[1] width should be old column[1] width");
+    doAssert(grid.getColumnWidth(2) === 50, "new column[2] width should be old column[2] width");    
+    done();
+  });
+  it('Keeps column widths when inserting a column', function (done) {
+    var grid = g({
+      test: this.test,
+      data: smallData()
+    });
+    grid.setColumnWidth(0, 20);
+    grid.setColumnWidth(1, 100);    
+    grid.setColumnWidth(2, 50);
+    grid.insertColumn({name: 'Foo'}, 1);
+    doAssert(grid.getColumnWidth(0) === 20, "new column[0] width should be old column[0] width");
+    doAssert(grid.getColumnWidth(2) === 100, "new column[2] width should be old column[1] width");
+    doAssert(grid.getColumnWidth(3) === 50, "new column[3] width should be old column[2] width");    
+    done();
+  });
 }
